@@ -1,0 +1,11 @@
+<% if resource.errors.any? %>
+  <div class="ui-alert ui-alert--danger auth-errors" role="alert">
+    <strong>Не удалось сохранить данные:</strong>
+
+    <ul>
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

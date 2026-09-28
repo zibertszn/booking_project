@@ -1,0 +1,30 @@
+<% content_for :title, "Вход | Booking System" %>
+
+<main class="auth-page ui-container">
+  <section class="ui-card auth-card">
+    <header class="ui-card__header ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+      <span class="ui-badge">Аккаунт</span>
+      <h1 class="ui-title">Вход</h1>
+      <p class="ui-subtitle">Введите email и пароль, чтобы продолжить работу с системой бронирования.</p>
+    </header>
+
+    <div class="ui-card__body">
+      <%= form_with scope: :session, url: sign_in_path, class: "ui-stack" do |form| %>
+        <div class="ui-form-field">
+          <%= form.label :email, "Email", class: "ui-label" %>
+          <%= form.email_field :email, class: "ui-input", autocomplete: "email", required: true, autofocus: true %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :password, "Пароль", class: "ui-label" %>
+          <%= form.password_field :password, class: "ui-input", autocomplete: "current-password", required: true %>
+        </div>
+
+        <div class="ui-cluster" style="justify-content: space-between;">
+          <%= form.submit "Войти", class: "ui-button ui-button--primary" %>
+          <%= link_to "Создать аккаунт", sign_up_path %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,162 @@
+<% content_for :title, "UI-kit | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-8); padding-block: var(--ui-space-8);">
+  <section class="ui-card">
+    <header class="ui-card__header ui-cluster" style="justify-content: space-between; align-items: flex-start;">
+      <div class="ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+        <span class="ui-badge ui-badge--success">Rails + Vue UI-kit</span>
+        <h1 class="ui-title">UI-kit Booking System</h1>
+        <p class="ui-subtitle">Страница предпросмотра базовых компонентов интерфейса для сервиса бронирования.</p>
+      </div>
+
+      <%= link_to "Вернуться к README", "#documentation", class: "ui-button ui-button--secondary" %>
+    </header>
+
+    <div class="ui-card__body ui-grid">
+      <article class="ui-card ui-resource-card">
+        <div class="ui-cluster" style="justify-content: space-between;">
+          <h2 class="ui-title" style="font-size: 1.25rem;">Переговорная A</h2>
+          <span class="ui-badge ui-badge--success">Доступно</span>
+        </div>
+
+        <p class="ui-subtitle">Комната для командных встреч до 8 человек: экран, доска и видеосвязь.</p>
+
+        <div class="ui-resource-card__meta">
+          <span>8 мест</span>
+          <span>60 минут</span>
+          <span>2 этаж</span>
+        </div>
+
+        <div class="ui-cluster">
+          <%= link_to "Забронировать", "#", class: "ui-button ui-button--primary" %>
+          <%= link_to "Подробнее", "#", class: "ui-button ui-button--secondary" %>
+        </div>
+      </article>
+
+      <article class="ui-card ui-resource-card">
+        <div class="ui-cluster" style="justify-content: space-between;">
+          <h2 class="ui-title" style="font-size: 1.25rem;">Проектор Epson</h2>
+          <span class="ui-badge ui-badge--warning">Ограничено</span>
+        </div>
+
+        <p class="ui-subtitle">Оборудование для презентаций, доступно после подтверждения администратором.</p>
+
+        <div class="ui-resource-card__meta">
+          <span>HDMI</span>
+          <span>Full HD</span>
+          <span>Склад</span>
+        </div>
+
+        <div class="ui-cluster">
+          <%= link_to "Запросить", "#", class: "ui-button ui-button--primary" %>
+          <%= link_to "Отмена", "#", class: "ui-button ui-button--danger" %>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="ui-card">
+    <header class="ui-card__header">
+      <h2 class="ui-title" style="font-size: 1.5rem;">Кнопки</h2>
+      <p class="ui-subtitle">Основные действия, вторичные действия и опасные операции.</p>
+    </header>
+
+    <div class="ui-card__body ui-cluster">
+      <button class="ui-button ui-button--primary" type="button">Primary action</button>
+      <button class="ui-button ui-button--secondary" type="button">Secondary action</button>
+      <button class="ui-button ui-button--danger" type="button">Danger action</button>
+      <button class="ui-button ui-button--primary" type="button" disabled>Disabled</button>
+    </div>
+  </section>
+
+  <section class="ui-card">
+    <header class="ui-card__header">
+      <h2 class="ui-title" style="font-size: 1.5rem;">Статусы и уведомления</h2>
+      <p class="ui-subtitle">Бейджи и alert-блоки для статусов ресурсов и результата операций.</p>
+    </header>
+
+    <div class="ui-card__body ui-stack">
+      <div class="ui-cluster">
+        <span class="ui-badge">Primary</span>
+        <span class="ui-badge ui-badge--success">Success</span>
+        <span class="ui-badge ui-badge--warning">Warning</span>
+        <span class="ui-badge ui-badge--danger">Danger</span>
+      </div>
+
+      <div class="ui-alert">Информация: выберите ресурс и время для бронирования.</div>
+      <div class="ui-alert ui-alert--success">Успех: выбранное время доступно.</div>
+      <div class="ui-alert ui-alert--warning">Внимание: осталось мало свободных слотов.</div>
+      <div class="ui-alert ui-alert--danger">Ошибка: это время уже занято.</div>
+    </div>
+  </section>
+
+  <section class="ui-card">
+    <header class="ui-card__header">
+      <h2 class="ui-title" style="font-size: 1.5rem;">Форма бронирования</h2>
+      <p class="ui-subtitle">Поля ввода, select, textarea и вспомогательный текст.</p>
+    </header>
+
+    <div class="ui-card__body">
+      <form class="ui-stack" action="#" method="post">
+        <div class="ui-grid">
+          <div class="ui-form-field">
+            <label class="ui-label" for="ui_kit_resource">Ресурс</label>
+            <select class="ui-select" id="ui_kit_resource" name="resource">
+              <option>Переговорная A</option>
+              <option>Переговорная B</option>
+              <option>Проектор Epson</option>
+            </select>
+            <span class="ui-help-text">Выберите ресурс, который хотите забронировать.</span>
+          </div>
+
+          <div class="ui-form-field">
+            <label class="ui-label" for="ui_kit_date">Дата</label>
+            <input class="ui-input" id="ui_kit_date" name="date" type="date">
+            <span class="ui-help-text">Дата будет проверена на доступность.</span>
+          </div>
+        </div>
+
+        <div class="ui-grid">
+          <div class="ui-form-field">
+            <label class="ui-label" for="ui_kit_start_time">Начало</label>
+            <input class="ui-input" id="ui_kit_start_time" name="start_time" type="time">
+          </div>
+
+          <div class="ui-form-field">
+            <label class="ui-label" for="ui_kit_end_time">Окончание</label>
+            <input class="ui-input" id="ui_kit_end_time" name="end_time" type="time">
+          </div>
+        </div>
+
+        <div class="ui-form-field">
+          <label class="ui-label" for="ui_kit_comment">Комментарий</label>
+          <textarea class="ui-textarea" id="ui_kit_comment" name="comment" placeholder="Например: нужна видеосвязь и маркеры для доски"></textarea>
+        </div>
+
+        <div class="ui-cluster">
+          <button class="ui-button ui-button--primary" type="submit">Создать бронь</button>
+          <button class="ui-button ui-button--secondary" type="reset">Сбросить</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="ui-card" id="documentation">
+    <header class="ui-card__header">
+      <h2 class="ui-title" style="font-size: 1.5rem;">Как использовать</h2>
+      <p class="ui-subtitle">CSS-классы можно использовать прямо в ERB, а Vue-компоненты импортировать из <code>app/javascript/ui</code>.</p>
+    </header>
+
+    <div class="ui-card__body ui-stack">
+      <div class="ui-alert">
+        Эта страница доступна по адресу <strong>/ui_kit</strong> и предназначена как dev-preview UI-kit.
+      </div>
+
+      <pre class="ui-card" style="overflow: auto; padding: var(--ui-space-4); margin: 0;"><code>&lt;%= link_to "Забронировать", resource_path(resource), class: "ui-button ui-button--primary" %&gt;
+
+&lt;article class="ui-card ui-resource-card"&gt;
+  &lt;span class="ui-badge ui-badge--success"&gt;Доступно&lt;/span&gt;
+&lt;/article&gt;</code></pre>
+    </div>
+  </section>
+</main>

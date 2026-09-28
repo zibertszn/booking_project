@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Booking System" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Booking System">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body>
+    <header class="app-header">
+      <nav class="ui-container app-nav" aria-label="Основная навигация">
+        <%= link_to "Booking System", root_path, class: "app-nav__brand" %>
+
+        <div class="ui-cluster">
+          <%= link_to "UI-kit", ui_kit_path, class: "app-nav__link" %>
+
+          <% if user_signed_in? %>
+            <span class="app-nav__user"><%= current_user.name %></span>
+            <%= button_to "Выйти", sign_out_path, method: :delete, class: "ui-button ui-button--secondary" %>
+          <% else %>
+            <%= link_to "Войти", sign_in_path, class: "ui-button ui-button--secondary" %>
+            <%= link_to "Регистрация", sign_up_path, class: "ui-button ui-button--primary" %>
+          <% end %>
+        </div>
+      </nav>
+    </header>
+
+    <% if flash.any? %>
+      <div class="ui-container flash-container">
+        <% flash.each do |type, message| %>
+          <% alert_class = type.to_s == "alert" ? "ui-alert--danger" : "ui-alert--success" %>
+          <div class="ui-alert <%= alert_class %>" role="status"><%= message %></div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

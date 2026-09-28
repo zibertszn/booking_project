@@ -1,0 +1,43 @@
+<% content_for :title, "Регистрация | Booking System" %>
+
+<main class="auth-page ui-container">
+  <section class="ui-card auth-card">
+    <header class="ui-card__header ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+      <span class="ui-badge ui-badge--success">Новый аккаунт</span>
+      <h1 class="ui-title">Регистрация</h1>
+      <p class="ui-subtitle">Создайте аккаунт, чтобы бронировать ресурсы и управлять своими заявками.</p>
+    </header>
+
+    <div class="ui-card__body">
+      <%= render "shared/error_messages", resource: @user %>
+
+      <%= form_with model: @user, url: sign_up_path, class: "ui-stack" do |form| %>
+        <div class="ui-form-field">
+          <%= form.label :name, "Имя", class: "ui-label" %>
+          <%= form.text_field :name, class: "ui-input", autocomplete: "name", required: true %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :email, "Email", class: "ui-label" %>
+          <%= form.email_field :email, class: "ui-input", autocomplete: "email", required: true %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :password, "Пароль", class: "ui-label" %>
+          <%= form.password_field :password, class: "ui-input", autocomplete: "new-password", required: true %>
+          <span class="ui-help-text">Минимум 6 символов.</span>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :password_confirmation, "Повторите пароль", class: "ui-label" %>
+          <%= form.password_field :password_confirmation, class: "ui-input", autocomplete: "new-password", required: true %>
+        </div>
+
+        <div class="ui-cluster" style="justify-content: space-between;">
+          <%= form.submit "Зарегистрироваться", class: "ui-button ui-button--primary" %>
+          <%= link_to "Уже есть аккаунт? Войти", sign_in_path %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</main>
