@@ -27,4 +27,8 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.valid?
     assert_includes user.errors[:password], "is too short (minimum is 6 characters)"
   end
+
+  test "has many bookings" do
+    assert_includes users(:alice).bookings, bookings(:existing_booking)
+  end
 end

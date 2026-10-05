@@ -10,9 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_26_000100) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_05_000200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "resource_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resource_id", "starts_at"], name: "index_bookings_on_resource_id_and_starts_at"
+    t.index ["resource_id"], name: "index_bookings_on_resource_id"
+    t.index ["user_id", "starts_at"], name: "index_bookings_on_user_id_and_starts_at"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+    t.check_constraint "ends_at > starts_at", name: "bookings_end_after_start"
+  end
+
+  create_table "resources", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "capacity", default: 1, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_resources_on_name", unique: true
+    t.check_constraint "capacity > 0", name: "resources_capacity_positive"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
@@ -22,4 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_000100) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "bookings", "resources"
+  add_foreign_key "bookings", "users"
 end

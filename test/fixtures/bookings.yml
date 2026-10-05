@@ -1,0 +1,5 @@
+existing_booking:
+  user: alice
+  resource: meeting_room
+  starts_at: 2030-01-15 10:00:00
+  ends_at: 2030-01-15 12:00:00
