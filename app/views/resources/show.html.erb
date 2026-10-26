@@ -1,0 +1,40 @@
+<% content_for :title, "#{@resource.name} | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-6); padding-block: var(--ui-space-8);">
+  <%= link_to "← Вернуться в каталог", resources_path %>
+
+  <section class="ui-card">
+    <header class="ui-card__header ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+      <span class="ui-badge ui-badge--success">Доступен для бронирования</span>
+      <h1 class="ui-title"><%= @resource.name %></h1>
+      <p class="ui-subtitle"><%= @resource.description.presence || "Выберите свободный интервал времени." %></p>
+      <span class="ui-help-text">Вместимость: <%= @resource.capacity %></span>
+      <% if @resource.user.present? %>
+        <span class="ui-help-text">Опубликовал: <%= @resource.user.name %></span>
+      <% end %>
+    </header>
+
+    <div class="ui-card__body">
+      <% unless user_signed_in? %>
+        <div class="ui-alert">Чтобы забронировать ресурс, <%= link_to "войдите в аккаунт", sign_in_path %>.</div>
+      <% else %>
+        <%= render "shared/error_messages", resource: @booking %>
+        <%= form_with model: @booking, url: bookings_path, class: "ui-stack" do |form| %>
+          <%= form.hidden_field :resource_id, value: @resource.id %>
+          <div class="ui-grid">
+            <div class="ui-form-field">
+              <%= form.label :starts_at, "Начало", class: "ui-label" %>
+              <%= form.datetime_local_field :starts_at, class: "ui-input", required: true %>
+            </div>
+            <div class="ui-form-field">
+              <%= form.label :ends_at, "Окончание", class: "ui-label" %>
+              <%= form.datetime_local_field :ends_at, class: "ui-input", required: true %>
+            </div>
+          </div>
+          <span class="ui-help-text">Время окончания должно быть позже времени начала. Соседние бронирования разрешены.</span>
+          <%= form.submit "Забронировать", class: "ui-button ui-button--primary" %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,39 @@
+<% content_for :title, "Каталог ресурсов | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-8); padding-block: var(--ui-space-8);">
+  <section class="ui-card">
+    <header class="ui-card__header ui-cluster" style="justify-content: space-between; align-items: flex-start;">
+      <div class="ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+        <span class="ui-badge ui-badge--success">Каталог</span>
+        <h1 class="ui-title">Доступные ресурсы</h1>
+        <p class="ui-subtitle">Выберите ресурс и время, чтобы оформить бронирование.</p>
+      </div>
+      <div class="ui-cluster">
+        <%= link_to "Добавить ресурс", new_resource_path, class: "ui-button ui-button--primary" %>
+        <% if user_signed_in? %>
+          <%= link_to "Мои бронирования", my_bookings_path, class: "ui-button ui-button--secondary" %>
+        <% end %>
+      </div>
+    </header>
+
+    <div class="ui-card__body">
+      <% if @resources.any? %>
+        <div class="ui-grid">
+          <% @resources.each do |resource| %>
+            <article class="ui-card ui-resource-card">
+              <div class="ui-cluster" style="justify-content: space-between;">
+                <h2 class="ui-title" style="font-size: 1.25rem;"><%= resource.name %></h2>
+                <span class="ui-badge ui-badge--success">Доступен</span>
+              </div>
+              <p class="ui-subtitle"><%= resource.description.presence || "Ресурс доступен для бронирования." %></p>
+              <div class="ui-resource-card__meta"><span>Вместимость: <%= resource.capacity %></span></div>
+              <%= link_to "Подробнее и забронировать", resource_path(resource), class: "ui-button ui-button--primary" %>
+            </article>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="ui-alert ui-alert--warning">Сейчас нет доступных ресурсов.</div>
+      <% end %>
+    </div>
+  </section>
+</main>

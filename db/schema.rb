@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_05_000200) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_12_000100) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "btree_gist"
   enable_extension "pg_catalog.plpgsql"
 
   create_table "bookings", force: :cascade do |t|
@@ -21,11 +22,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_000200) do
     t.datetime "ends_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.virtual "booking_period", type: :tsrange, as: "tsrange(starts_at, ends_at, '[)'::text)", stored: true
     t.index ["resource_id", "starts_at"], name: "index_bookings_on_resource_id_and_starts_at"
     t.index ["resource_id"], name: "index_bookings_on_resource_id"
     t.index ["user_id", "starts_at"], name: "index_bookings_on_user_id_and_starts_at"
     t.index ["user_id"], name: "index_bookings_on_user_id"
     t.check_constraint "ends_at > starts_at", name: "bookings_end_after_start"
+    t.exclusion_constraint "resource_id WITH =, booking_period WITH &&", using: :gist, name: "bookings_no_resource_overlap"
   end
 
   create_table "resources", force: :cascade do |t|
@@ -35,7 +38,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_000200) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["name"], name: "index_resources_on_name", unique: true
+    t.index ["user_id"], name: "index_resources_on_user_id"
     t.check_constraint "capacity > 0", name: "resources_capacity_positive"
   end
 
@@ -50,4 +55,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_000200) do
 
   add_foreign_key "bookings", "resources"
   add_foreign_key "bookings", "users"
+  add_foreign_key "resources", "users"
 end

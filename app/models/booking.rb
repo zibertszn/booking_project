@@ -2,6 +2,8 @@ class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :resource
 
+  scope :upcoming, -> { where("ends_at >= ?", Time.current).order(:starts_at) }
+
   validate :ends_after_starts
   validate :resource_is_available
 

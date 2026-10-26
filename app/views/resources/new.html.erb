@@ -1,0 +1,40 @@
+<% content_for :title, "Добавить ресурс | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-6); padding-block: var(--ui-space-8);">
+  <%= link_to "← Вернуться в каталог", resources_path %>
+
+  <section class="ui-card">
+    <header class="ui-card__header ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+      <h1 class="ui-title">Добавить ресурс</h1>
+      <p class="ui-subtitle">Опубликуйте свой ресурс, чтобы другие пользователи могли его забронировать.</p>
+    </header>
+
+    <div class="ui-card__body">
+      <%= render "shared/error_messages", resource: @resource %>
+
+      <%= form_with model: @resource, class: "ui-stack" do |form| %>
+        <div class="ui-form-field">
+          <%= form.label :name, "Название", class: "ui-label" %>
+          <%= form.text_field :name, class: "ui-input", required: true, maxlength: 100 %>
+          <span class="ui-help-text">Уникальное название, не более 100 символов.</span>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :description, "Описание", class: "ui-label" %>
+          <%= form.text_area :description, class: "ui-textarea", rows: 5 %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :capacity, "Вместимость", class: "ui-label" %>
+          <%= form.number_field :capacity, class: "ui-input", required: true, min: 1, step: 1 %>
+        </div>
+
+        <p class="ui-help-text">После публикации ресурс сразу появится в каталоге. Автором будете указаны вы.</p>
+        <div class="ui-cluster">
+          <%= form.submit "Опубликовать ресурс", class: "ui-button ui-button--primary" %>
+          <%= link_to "Отмена", resources_path, class: "ui-button ui-button--secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</main>

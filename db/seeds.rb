@@ -7,3 +7,13 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+Resource.find_or_create_by!(name: "Переговорная A") do |resource|
+  resource.description = "Комната для командных встреч с экраном и доской."
+  resource.capacity = 8
+end
+
+Resource.find_or_create_by!(name: "Проектор Epson") do |resource|
+  resource.description = "Проектор для презентаций и учебных мероприятий."
+  resource.capacity = 1
+end

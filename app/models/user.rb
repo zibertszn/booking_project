@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :bookings, dependent: :destroy
+  has_many :resources, dependent: :restrict_with_error
 
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :name, with: ->(name) { name.strip }

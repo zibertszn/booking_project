@@ -1,0 +1,36 @@
+<% content_for :title, "Мои бронирования | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-6); padding-block: var(--ui-space-8);">
+  <section class="ui-card">
+    <header class="ui-card__header ui-cluster" style="justify-content: space-between;">
+      <div>
+        <span class="ui-badge">Личный кабинет</span>
+        <h1 class="ui-title">Мои бронирования</h1>
+        <p class="ui-subtitle">Здесь отображаются созданные вами бронирования.</p>
+      </div>
+      <%= link_to "Новая бронь", resources_path, class: "ui-button ui-button--primary" %>
+    </header>
+
+    <div class="ui-card__body ui-stack">
+      <% if @bookings.any? %>
+        <% @bookings.each do |booking| %>
+          <article class="ui-card ui-resource-card">
+            <div class="ui-cluster" style="justify-content: space-between;">
+              <h2 class="ui-title" style="font-size: 1.15rem;"><%= booking.resource.name %></h2>
+              <span class="ui-badge ui-badge--success"><%= booking.starts_at >= Time.current ? "Предстоящее" : "Завершено" %></span>
+            </div>
+            <div class="ui-resource-card__meta">
+              <span>Начало: <%= l booking.starts_at, format: :short %></span>
+              <span>Окончание: <%= l booking.ends_at, format: :short %></span>
+            </div>
+            <% if booking.ends_at >= Time.current %>
+              <%= button_to "Отменить бронирование", booking_path(booking), method: :delete, class: "ui-button ui-button--danger", data: { turbo_confirm: "Отменить это бронирование?" } %>
+            <% end %>
+          </article>
+        <% end %>
+      <% else %>
+        <div class="ui-alert">У вас пока нет бронирований. <%= link_to "Открыть каталог", resources_path %></div>
+      <% end %>
+    </div>
+  </section>
+</main>
