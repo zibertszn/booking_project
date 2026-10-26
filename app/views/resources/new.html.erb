@@ -12,7 +12,7 @@
     <div class="ui-card__body">
       <%= render "shared/error_messages", resource: @resource %>
 
-      <%= form_with model: @resource, class: "ui-stack" do |form| %>
+      <%= form_with model: @resource, class: "ui-stack", multipart: true do |form| %>
         <div class="ui-form-field">
           <%= form.label :name, "Название", class: "ui-label" %>
           <%= form.text_field :name, class: "ui-input", required: true, maxlength: 100 %>
@@ -25,8 +25,14 @@
         </div>
 
         <div class="ui-form-field">
-          <%= form.label :capacity, "Вместимость", class: "ui-label" %>
-          <%= form.number_field :capacity, class: "ui-input", required: true, min: 1, step: 1 %>
+          <%= form.label :resource_type, "Тип ресурса", class: "ui-label" %>
+          <%= form.select :resource_type, [["Недвижимость", "property"], ["Предмет", "item"]], { prompt: "Выберите тип" }, class: "ui-input", required: true %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :image, "Картинка", class: "ui-label" %>
+          <%= form.file_field :image, class: "ui-input", accept: "image/*" %>
+          <span class="ui-help-text">Допустимы изображения JPG, PNG и других распространённых форматов.</span>
         </div>
 
         <p class="ui-help-text">После публикации ресурс сразу появится в каталоге. Автором будете указаны вы.</p>

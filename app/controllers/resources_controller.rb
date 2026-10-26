@@ -40,7 +40,7 @@ class ResourcesController < ApplicationController
   private
 
   def resource_params
-    params.require(:resource).permit(:name, :description, :capacity)
+    params.require(:resource).permit(:name, :description, :resource_type, :image)
   end
 
   def parse_time(value)

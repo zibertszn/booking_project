@@ -1,11 +1,11 @@
 meeting_room:
   name: Meeting Room
   description: Room for team meetings
-  capacity: 8
+  resource_type: property
   active: true
 
 training_room:
   name: Training Room
   description: Room for workshops
-  capacity: 20
+  resource_type: property
   active: true

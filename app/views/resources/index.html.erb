@@ -21,12 +21,14 @@
         <div class="ui-grid">
           <% @resources.each do |resource| %>
             <article class="ui-card ui-resource-card">
+              <% if resource.image.attached? %>
+                <%= image_tag resource.image, alt: resource.name, style: "width: 100%; max-height: 220px; object-fit: cover;" %>
+              <% end %>
               <div class="ui-cluster" style="justify-content: space-between;">
                 <h2 class="ui-title" style="font-size: 1.25rem;"><%= resource.name %></h2>
-                <span class="ui-badge ui-badge--success">Доступен</span>
+                <span class="ui-badge ui-badge--success"><%= resource.resource_type_label %></span>
               </div>
               <p class="ui-subtitle"><%= resource.description.presence || "Ресурс доступен для бронирования." %></p>
-              <div class="ui-resource-card__meta"><span>Вместимость: <%= resource.capacity %></span></div>
               <%= link_to "Подробнее и забронировать", resource_path(resource), class: "ui-button ui-button--primary" %>
             </article>
           <% end %>

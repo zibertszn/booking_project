@@ -6,9 +6,12 @@
   <section class="ui-card">
     <header class="ui-card__header ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
       <span class="ui-badge ui-badge--success">Доступен для бронирования</span>
+      <span class="ui-help-text"><%= @resource.resource_type_label %></span>
       <h1 class="ui-title"><%= @resource.name %></h1>
       <p class="ui-subtitle"><%= @resource.description.presence || "Выберите свободный интервал времени." %></p>
-      <span class="ui-help-text">Вместимость: <%= @resource.capacity %></span>
+      <% if @resource.image.attached? %>
+        <%= image_tag @resource.image, alt: @resource.name, style: "width: 100%; max-height: 320px; object-fit: cover;" %>
+      <% end %>
       <% if @resource.user.present? %>
         <span class="ui-help-text">Опубликовал: <%= @resource.user.name %></span>
       <% end %>

@@ -38,7 +38,7 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
         resource: {
           name: "Alice's Projector",
           description: "Portable projector",
-          capacity: 1
+           resource_type: "item"
         }
       }
     end
@@ -58,7 +58,7 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to sign_in_path
 
     assert_no_difference "Resource.count" do
-      post resources_path, params: { resource: { name: "Guest Resource", capacity: 1 } }
+      post resources_path, params: { resource: { name: "Guest Resource", resource_type: "item" } }
     end
 
     assert_redirected_to sign_in_path
@@ -68,7 +68,7 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:alice))
 
     assert_no_difference "Resource.count" do
-      post resources_path, params: { resource: { name: "", capacity: 0 } }
+      post resources_path, params: { resource: { name: "", resource_type: "item" } }
     end
 
     assert_response :unprocessable_entity
@@ -80,7 +80,7 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:alice))
 
     post resources_path, params: {
-      resource: { name: "My equipment", capacity: 2, user_id: users(:bob).id, active: false }
+      resource: { name: "My equipment", resource_type: "item", user_id: users(:bob).id, active: false }
     }
 
     resource = Resource.find_by!(name: "My equipment")
@@ -94,14 +94,14 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
 
     assert_no_difference "Resource.count" do
       post resources_path, params: {
-        resource: { name: resources(:meeting_room).name, description: "My description", capacity: 3 }
+         resource: { name: resources(:meeting_room).name, description: "My description", resource_type: "item" }
       }
     end
 
     assert_response :unprocessable_entity
     assert_select ".ui-alert--danger"
     assert_select "textarea[name='resource[description]']", text: "My description"
-    assert_select "input[name='resource[capacity]'][value='3']"
+    assert_select "select[name='resource[resource_type]']"
   end
 
   test "authenticated user can create and cancel a booking" do
