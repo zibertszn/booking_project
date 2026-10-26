@@ -121,10 +121,15 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
     end
 
     booking = Booking.order(:id).last
+    assert_equal users(:alice), booking.user
+    assert_equal resources(:meeting_room), booking.resource
+    assert_equal Time.zone.parse("2030-01-15T13:00"), booking.starts_at
+    assert_equal Time.zone.parse("2030-01-15T14:00"), booking.ends_at
     assert_redirected_to my_bookings_path
     follow_redirect!
     assert_select "h1", text: "Мои бронирования"
     assert_select "h2", text: resources(:meeting_room).name
+    assert_select ".ui-alert--success", text: "Бронирование успешно создано."
 
     assert_difference "Booking.count", -1 do
       delete booking_path(booking)
@@ -167,6 +172,36 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal true, response.parsed_body["available"]
+  end
+
+  test "availability endpoint rejects an invalid interval" do
+    get availability_resource_path(resources(:meeting_room)), params: {
+      starts_at: "2030-01-15T14:00",
+      ends_at: "2030-01-15T13:00"
+    }
+
+    assert_response :unprocessable_entity
+    assert_equal false, response.parsed_body["available"]
+    assert_equal "Укажите корректный интервал времени.", response.parsed_body["error"]
+  end
+
+  test "booking always belongs to the signed-in user" do
+    sign_in_as(users(:bob))
+
+    assert_difference "Booking.count", 1 do
+      post bookings_path, params: {
+        booking: {
+          resource_id: resources(:training_room).id,
+          starts_at: "2030-01-16T13:00",
+          ends_at: "2030-01-16T14:00",
+          user_id: users(:alice).id
+        }
+      }
+    end
+
+    booking = Booking.order(:id).last
+    assert_equal users(:bob), booking.user
+    assert_redirected_to my_bookings_path
   end
 
   test "user cannot cancel another user's booking" do
