@@ -73,6 +73,59 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
     assert_select "h2", text: resource.name, count: 0
   end
 
+  test "owner can edit their own announcement" do
+    resource = Resource.create!(name: "Alice's Room", resource_type: "property", user: users(:alice))
+    sign_in_as(users(:alice))
+
+    get edit_resource_path(resource)
+
+    assert_response :success
+    assert_select "h1", text: "Редактировать объявление"
+
+    patch resource_path(resource), params: {
+      resource: { name: "Updated Room", description: "Updated description", resource_type: "item" }
+    }
+
+    assert_redirected_to my_resources_path
+    resource.reload
+    assert_equal "Updated Room", resource.name
+    assert_equal "Updated description", resource.description
+    assert_equal "item", resource.resource_type
+  end
+
+  test "user cannot edit another user's announcement" do
+    resource = Resource.create!(name: "Alice's Equipment", resource_type: "item", user: users(:alice))
+    sign_in_as(users(:bob))
+
+    get edit_resource_path(resource)
+    assert_redirected_to my_resources_path
+
+    patch resource_path(resource), params: { resource: { name: "Changed" } }
+
+    assert_redirected_to my_resources_path
+    assert_equal "Alice's Equipment", resource.reload.name
+  end
+
+  test "owner cannot book their own announcement" do
+    resource = Resource.create!(name: "Alice's Room", resource_type: "property", user: users(:alice))
+    sign_in_as(users(:alice))
+
+    assert_no_difference "Booking.count" do
+      post bookings_path, params: {
+        booking: {
+          resource_id: resource.id,
+          starts_at: "2030-01-18T13:00",
+          ends_at: "2030-01-18T14:00"
+        }
+      }
+    end
+
+    assert_redirected_to resource_path(resource)
+    follow_redirect!
+    assert_select ".ui-alert--danger", text: "Нельзя бронировать собственное объявление."
+    assert_select "form[action='#{bookings_path}']", count: 0
+  end
+
   test "guest cannot access their announcements" do
     get my_resources_path
 

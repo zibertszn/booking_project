@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get "ui_kit", to: "ui_kit#index"
 
-  resources :resources, only: %i[index show new create destroy] do
+  resources :resources, only: %i[index show new create edit update destroy] do
     get :availability, on: :member
   end
   resources :bookings, only: %i[create destroy]

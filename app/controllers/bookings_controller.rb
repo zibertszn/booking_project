@@ -9,6 +9,12 @@ class BookingsController < ApplicationController
 
   def create
     @resource = Resource.find(booking_params[:resource_id])
+
+    if @resource.user_id == current_user.id
+      redirect_to @resource, alert: "Нельзя бронировать собственное объявление."
+      return
+    end
+
     @booking = current_user.bookings.new(booking_params.except(:resource_id))
     @booking.resource = @resource
 

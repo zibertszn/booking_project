@@ -1,7 +1,7 @@
 class ResourcesController < ApplicationController
-  before_action :require_authentication, only: %i[new create mine destroy]
-  before_action :set_resource, only: %i[show availability destroy]
-  before_action :ensure_resource_owner, only: :destroy
+  before_action :require_authentication, only: %i[new create mine edit update destroy]
+  before_action :set_resource, only: %i[show availability edit update destroy]
+  before_action :ensure_resource_owner, only: %i[edit update destroy]
 
   def new
     @resource = current_user.resources.build
@@ -19,6 +19,17 @@ class ResourcesController < ApplicationController
 
   def mine
     @resources = current_user.resources.order(created_at: :desc)
+  end
+
+  def edit
+  end
+
+  def update
+    if @resource.update(resource_params)
+      redirect_to my_resources_path, notice: "Объявление обновлено."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def index

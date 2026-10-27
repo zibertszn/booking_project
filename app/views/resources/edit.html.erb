@@ -1,0 +1,47 @@
+<% content_for :title, "Редактировать объявление | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-6); padding-block: var(--ui-space-8);">
+  <%= link_to "← Мои объявления", my_resources_path %>
+
+  <section class="ui-card">
+    <header class="ui-card__header ui-stack" style="--ui-stack-gap: var(--ui-space-2);">
+      <span class="ui-badge">Мои объявления</span>
+      <h1 class="ui-title">Редактировать объявление</h1>
+      <p class="ui-subtitle">Измените описание, тип или изображение ресурса.</p>
+    </header>
+
+    <div class="ui-card__body">
+      <%= render "shared/error_messages", resource: @resource %>
+
+      <%= form_with model: @resource, class: "ui-stack", multipart: true do |form| %>
+        <div class="ui-form-field">
+          <%= form.label :name, "Название", class: "ui-label" %>
+          <%= form.text_field :name, class: "ui-input", required: true, maxlength: 100 %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :description, "Описание", class: "ui-label" %>
+          <%= form.text_area :description, class: "ui-textarea", rows: 5 %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :resource_type, "Тип ресурса", class: "ui-label" %>
+          <%= form.select :resource_type, [["Недвижимость", "property"], ["Предмет", "item"]], { prompt: "Выберите тип" }, class: "ui-input", required: true %>
+        </div>
+
+        <div class="ui-form-field">
+          <%= form.label :image, "Новое изображение", class: "ui-label" %>
+          <%= form.file_field :image, class: "ui-input", accept: "image/*" %>
+          <% if @resource.image.attached? %>
+            <%= image_tag @resource.image, alt: @resource.name, class: "resource-image resource-image--card" %>
+          <% end %>
+        </div>
+
+        <div class="ui-cluster">
+          <%= form.submit "Сохранить изменения", class: "ui-button ui-button--primary" %>
+          <%= link_to "Отмена", my_resources_path, class: "ui-button ui-button--secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</main>

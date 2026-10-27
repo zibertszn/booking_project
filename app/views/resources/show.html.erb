@@ -10,16 +10,21 @@
       <h1 class="ui-title"><%= @resource.name %></h1>
       <p class="ui-subtitle"><%= @resource.description.presence || "Выберите свободный интервал времени." %></p>
       <% if @resource.image.attached? %>
-        <%= image_tag @resource.image, alt: @resource.name, style: "width: 100%; max-height: 320px; object-fit: cover;" %>
+        <%= image_tag @resource.image, alt: @resource.name, class: "resource-image resource-image--detail" %>
       <% end %>
       <% if @resource.user.present? %>
         <span class="ui-help-text">Опубликовал: <%= @resource.user.name %></span>
       <% end %>
+      <% if user_signed_in? && @resource.user_id == current_user.id %>
+        <%= link_to "Редактировать объявление", edit_resource_path(@resource), class: "ui-button ui-button--secondary" %>
+      <% end %>
     </header>
 
     <div class="ui-card__body">
-      <% unless user_signed_in? %>
+      <% if !user_signed_in? %>
         <div class="ui-alert">Чтобы забронировать ресурс, <%= link_to "войдите в аккаунт", sign_in_path %>.</div>
+      <% elsif @resource.user_id == current_user.id %>
+        <div class="ui-alert">Это ваше объявление. Забронировать собственный ресурс нельзя.</div>
       <% else %>
         <%= render "shared/error_messages", resource: @booking %>
         <%= form_with model: @booking, url: bookings_path, class: "ui-stack" do |form| %>
