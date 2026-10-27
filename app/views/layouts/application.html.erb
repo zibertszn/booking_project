@@ -33,6 +33,7 @@
 
           <% if user_signed_in? %>
             <span class="app-nav__user"><%= current_user.name %></span>
+            <%= link_to "Мои объявления", my_resources_path, class: "app-nav__link" %>
             <%= link_to "Мои бронирования", my_bookings_path, class: "app-nav__link" %>
             <%= button_to "Выйти", sign_out_path, method: :delete, class: "ui-button ui-button--secondary" %>
           <% else %>

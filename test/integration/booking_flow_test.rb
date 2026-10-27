@@ -53,6 +53,45 @@ class BookingFlowTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{resource_path(resource)}']"
   end
 
+  test "authenticated user can view and delete their own announcements" do
+    sign_in_as(users(:alice))
+    resource = Resource.create!(name: "Alice's Room", resource_type: "property", user: users(:alice))
+
+    get my_resources_path
+
+    assert_response :success
+    assert_select "h1", text: "Мои объявления"
+    assert_select "h2", text: resource.name
+
+    assert_difference "Resource.count", -1 do
+      delete resource_path(resource)
+    end
+
+    assert_redirected_to my_resources_path
+    follow_redirect!
+    assert_select ".ui-alert--success", text: "Объявление удалено."
+    assert_select "h2", text: resource.name, count: 0
+  end
+
+  test "guest cannot access their announcements" do
+    get my_resources_path
+
+    assert_redirected_to sign_in_path
+  end
+
+  test "user cannot delete another user's announcement" do
+    resource = Resource.create!(name: "Alice's Equipment", resource_type: "item", user: users(:alice))
+    sign_in_as(users(:bob))
+
+    assert_no_difference "Resource.count" do
+      delete resource_path(resource)
+    end
+
+    assert_redirected_to my_resources_path
+    follow_redirect!
+    assert_select ".ui-alert--danger", text: "Вы можете удалять только свои объявления."
+  end
+
   test "guest cannot publish a resource" do
     get new_resource_path
     assert_redirected_to sign_in_path

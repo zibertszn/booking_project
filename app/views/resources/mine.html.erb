@@ -1,0 +1,39 @@
+<% content_for :title, "Мои объявления | Booking System" %>
+
+<main class="ui-container ui-stack" style="--ui-stack-gap: var(--ui-space-6); padding-block: var(--ui-space-8);">
+  <section class="ui-card">
+    <header class="ui-card__header ui-cluster" style="justify-content: space-between; align-items: flex-start;">
+      <div>
+        <span class="ui-badge">Личный кабинет</span>
+        <h1 class="ui-title">Мои объявления</h1>
+        <p class="ui-subtitle">Ресурсы, которые вы разместили на сайте.</p>
+      </div>
+      <%= link_to "Добавить ресурс", new_resource_path, class: "ui-button ui-button--primary" %>
+    </header>
+
+    <div class="ui-card__body">
+      <% if @resources.any? %>
+        <div class="ui-grid">
+          <% @resources.each do |resource| %>
+            <article class="ui-card ui-resource-card">
+              <% if resource.image.attached? %>
+                <%= image_tag resource.image, alt: resource.name, style: "width: 100%; max-height: 220px; object-fit: cover;" %>
+              <% end %>
+              <div class="ui-cluster" style="justify-content: space-between;">
+                <h2 class="ui-title" style="font-size: 1.25rem;"><%= resource.name %></h2>
+                <span class="ui-badge ui-badge--success"><%= resource.resource_type_label %></span>
+              </div>
+              <p class="ui-subtitle"><%= resource.description.presence || "Описание не добавлено." %></p>
+              <div class="ui-cluster">
+                <%= link_to "Открыть", resource_path(resource), class: "ui-button ui-button--secondary" %>
+                <%= button_to "Удалить", resource_path(resource), method: :delete, class: "ui-button ui-button--danger", data: { turbo_confirm: "Удалить это объявление?" } %>
+              </div>
+            </article>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="ui-alert">У вас пока нет объявлений. <%= link_to "Добавить ресурс", new_resource_path %></div>
+      <% end %>
+    </div>
+  </section>
+</main>

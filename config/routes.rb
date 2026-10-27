@@ -3,11 +3,12 @@ Rails.application.routes.draw do
 
   get "ui_kit", to: "ui_kit#index"
 
-  resources :resources, only: %i[index show new create] do
+  resources :resources, only: %i[index show new create destroy] do
     get :availability, on: :member
   end
   resources :bookings, only: %i[create destroy]
   get "my_bookings", to: "bookings#index", as: :my_bookings
+  get "my_resources", to: "resources#mine", as: :my_resources
 
   get "sign_up", to: "registrations#new", as: :sign_up
   post "sign_up", to: "registrations#create"

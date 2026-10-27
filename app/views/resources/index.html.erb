@@ -11,6 +11,7 @@
       <div class="ui-cluster">
         <%= link_to "Добавить ресурс", new_resource_path, class: "ui-button ui-button--primary" %>
         <% if user_signed_in? %>
+          <%= link_to "Мои объявления", my_resources_path, class: "ui-button ui-button--secondary" %>
           <%= link_to "Мои бронирования", my_bookings_path, class: "ui-button ui-button--secondary" %>
         <% end %>
       </div>
